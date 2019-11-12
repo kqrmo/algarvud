@@ -18,6 +18,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
@@ -30,9 +31,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class algarvudUI extends javax.swing.JFrame {
 
-    String[] tableHeader;
-    List<String[]> tableData = new ArrayList<>();
-    MyTableModel mtm;
     /**
      * Creates new form algarvudUI
      */
@@ -60,7 +58,6 @@ public class algarvudUI extends javax.swing.JFrame {
          
         scanner.close();
         
-        //resultArea.setText(Arrays.toString(str));
         lastQueryLabel.setText("Avatud csv fail!");
     }
 
@@ -223,26 +220,30 @@ public class algarvudUI extends javax.swing.JFrame {
 
     private void btnOpenCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenCSVActionPerformed
         
-        // Avab filechooseri, mille abil on võimalik avada kasutajal manuaalselt CSV fail.
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == fileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             String filename = file.toString();
-            try {                
+            try {     
                 Scanner scanner = new Scanner(new File(filename));
                 scanner.useDelimiter(";|\\r\\n|\\n"); // muster et eraldada ; ja \r\n, või ainult \n puhul
                 resultArea.setText("");
                 while (scanner.hasNext()) {
                     String data = scanner.next();
-                    //String[] str = data.split("|");
                     if (isNumeric(data)) {
                         int num = parseInt(data);
                         if (checkPrime(num)) {
-                            resultArea.append(num + System.lineSeparator());
+                            int i;
+                            for (i = 0; i < num; i++) {
+                                resultArea.append(num + System.lineSeparator());
+                            }
                         } 
                     }
                 }
                 scanner.close();
+                
+
+                
                 lastQueryLabel.setText("Avatud csv fail!");
                 btnSave.setEnabled(true);
 
