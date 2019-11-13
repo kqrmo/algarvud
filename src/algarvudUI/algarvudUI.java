@@ -5,7 +5,7 @@
  */
 package algarvudUI;
 
-import com.sun.xml.internal.ws.util.StringUtils;
+import java.awt.List;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,13 +14,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -182,7 +181,7 @@ public class algarvudUI extends javax.swing.JFrame {
                                 .addComponent(btnOpenCSV))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(btnClear)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 204, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 533, Short.MAX_VALUE)
                                 .addComponent(btnSaveTXT)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnSave)))))
@@ -206,7 +205,7 @@ public class algarvudUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(label2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
@@ -224,33 +223,29 @@ public class algarvudUI extends javax.swing.JFrame {
         if (returnVal == fileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             String filename = file.toString();
-            try {     
-                Scanner scanner = new Scanner(new File(filename));
-                scanner.useDelimiter(";|\\r\\n|\\n"); // muster et eraldada ; ja \r\n, või ainult \n puhul
+            
+            try {
                 resultArea.setText("");
-                while (scanner.hasNext()) {
-                    String data = scanner.next();
-                    if (isNumeric(data)) {
-                        int num = parseInt(data);
-                        if (checkPrime(num)) {
-                            int i;
-                            for (i = 0; i < num; i++) {
-                                resultArea.append(num + System.lineSeparator());
+                Scanner sc = new Scanner(new File(filename));
+                sc.useDelimiter(";");
+                while (sc.hasNext()) {
+                    String line = sc.nextLine();
+                    String[] lines = line.split(";");
+                    for (String linez: lines) {
+                        if (isNumeric(linez)) {
+                            int num = parseInt(linez);
+                            if (checkPrime(num)) {
+                                resultArea.append(num + " | ");
                             }
-                        } 
+                        }
                     }
-                }
-                scanner.close();
-                
-
-                
-                lastQueryLabel.setText("Avatud csv fail!");
-                btnSave.setEnabled(true);
-
-        
-            } catch (IOException ex) {
-                System.out.println("error..");
-            }
+ 
+                }   
+                sc.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(algarvudUI.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+            
         }  
         
     }//GEN-LAST:event_btnOpenCSVActionPerformed
