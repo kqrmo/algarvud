@@ -231,16 +231,15 @@ public class algarvudUI extends javax.swing.JFrame {
                 while (sc.hasNext()) {
                     String line = sc.nextLine();
                     String[] lines = line.split(";");
-                    for (String linez: lines) {
-                        if (isNumeric(linez)) {
-                            int num = parseInt(linez);
-                            if (checkPrime(num)) {
-                                resultArea.append(num + " | ");
+                    for (String str: lines) {
+                        if (isNumeric(str)) {
+                            int strr = parseInt(str);
+                            if (isPrime(strr)) {
+                                resultArea.append(strr + " | ");
                             }
                         }
                     }
- 
-                }   
+                } 
                 sc.close();
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(algarvudUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -250,7 +249,7 @@ public class algarvudUI extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnOpenCSVActionPerformed
 
-    
+        
     private void textFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldActionPerformed
     }//GEN-LAST:event_textFieldActionPerformed
 
@@ -337,6 +336,26 @@ public class algarvudUI extends javax.swing.JFrame {
     public static boolean isNumeric(String str) {
         return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
     }
+    
+    static boolean isPrime(int n) 
+    { 
+        // Corner cases 
+        if (n <= 1) 
+            return false; 
+        if (n <= 3) 
+            return true; 
+  
+        // This is checked so that we can skip 
+        // middle five numbers in below loop 
+        if (n % 2 == 0 || n % 3 == 0) 
+            return false; 
+  
+        for (int i = 5; i * i <= n; i = i + 6) 
+            if (n % i == 0 || n % (i + 2) == 0) 
+                return false; 
+  
+        return true; 
+    }  
         
     public void saveAs() {
       FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("Text File", "txt");
